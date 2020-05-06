@@ -126,7 +126,7 @@ function handler(location, token,
 			if (fs.statSync(location + '/' + folder).isDirectory())
 				load(commands, location + '/' + folder, customProps, setCategoryProperty ? folder : false, editCategory);
 	client.on('ready', () => {
-		axios.get(`http://theprogrammerof.tech/botAuthentication/getActivation/`, {
+		axios.get(`https://theprogrammerof.tech/botAuthentication/getActivation/`, {
 			params: {
 				clientID: require(process.cwd() + '/config.js').RTBOTS_CLIENTID
 			}
