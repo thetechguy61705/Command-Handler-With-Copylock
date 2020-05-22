@@ -2,8 +2,7 @@ const fs = require('fs');
 const Discord = require('discord.js');
 const { Client, Collection } = Discord;
 const { defaults, defObjVal, getObjVal, escapeRegExpChars } = require('./utils.js');
-const axios = require('axios');
-let authenticated;
+
 
 const Arguments = require('./structures/Arguments.js');
 const Call = require('./structures/Call.js');
@@ -125,33 +124,8 @@ function handler(location, token,
 		for (let folder of fs.readdirSync(location))
 			if (fs.statSync(location + '/' + folder).isDirectory())
 				load(commands, location + '/' + folder, customProps, setCategoryProperty ? folder : false, editCategory);
-	client.on('ready', () => {
-		axios.get(`https://theprogrammerof.tech/botAuthentication/getActivation/`, {
-			params: {
-				clientID: require(process.cwd() + '/config.js').RTBOTS_CLIENTID
-			}
-		}).then(response => {
-			if (response.data.code === 401) {
-				console.log('Couldn\'t contact the server for authentication. Please make sure your Client ID is correct, and you\'ve paid for your bot.')
-				authenticated = false;
-			}
-
-			if (response.data.botActivated === true) {
-				console.log(`The bot has successfully connected and authenticated with R & T Bots servers. The bot has been paid.`)
-				authenticated = true;
-			}
-			if (response.data.botActivated === false) {
-				console.log(`Your bot has not been paid for, and is deactivated. If your bot was recently activated, please give it up to 10 mins to propagate.`)
-				authenticated = false;
-			}
-		}).catch(error => {
-			console.log('Couldn\'t contact the server for authentication. This might be a temporary outage. Please make a ticket in our support server. Also, Please make sure your Client ID is correct, and you\'ve paid for your bot.')
-			authenticated = false;
-		})
-	})
+	
 	client.on('message', async (message) => {
-		if (authenticated === false)
-			return console.log(`Your bot has not been paid for, and is deactivated. If your bot was recently activated, please give it up to 10 mins to propagate. After 10 mins, please restart your bot and try again.`)
 		if (message.author.bot && !allowBots)
 			return;
 
